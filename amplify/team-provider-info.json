@@ -1,0 +1,19 @@
+{
+    "jundevice": {
+        "awscloudformation": {
+            "AuthRoleName": "amplify-fireextinguisher03-jundevice-221155-authRole",
+            "UnauthRoleArn": "arn:aws:iam::005513063453:role/amplify-fireextinguisher03-jundevice-221155-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::005513063453:role/amplify-fireextinguisher03-jundevice-221155-authRole",
+            "Region": "ap-southeast-1",
+            "DeploymentBucketName": "amplify-fireextinguisher03-jundevice-221155-deployment",
+            "UnauthRoleName": "amplify-fireextinguisher03-jundevice-221155-unauthRole",
+            "StackName": "amplify-fireextinguisher03-jundevice-221155",
+            "StackId": "arn:aws:cloudformation:ap-southeast-1:005513063453:stack/amplify-fireextinguisher03-jundevice-221155/e6370460-fe43-11e9-8b1a-06abab1199f8"
+        },
+        "categories": {
+            "auth": {
+                "fireextinguisher03a46fa71c": {}
+            }
+        }
+    }
+}

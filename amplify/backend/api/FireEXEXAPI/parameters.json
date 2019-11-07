@@ -1,0 +1,11 @@
+{
+    "AppSyncApiName": "FireEXEXAPI",
+    "DynamoDBBillingMode": "PAY_PER_REQUEST",
+    "DynamoDBEnableServerSideEncryption": "false",
+    "AuthCognitoUserPoolId": {
+        "Fn::GetAtt": [
+            "authfireextinguisher03a46fa71c",
+            "Outputs.UserPoolId"
+        ]
+    }
+}

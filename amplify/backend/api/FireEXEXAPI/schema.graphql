@@ -1,0 +1,23 @@
+type Location @model {
+  id: ID!
+  name: String!
+  address: String
+  extinguisher: [Extinguisher] @connection(name: "LocationExtinguisher")
+}
+type Extinguisher @model {
+  locationId: ID!
+  extinguisherId: ID!
+  extinguisherNumber: String!
+  subLocation: String
+  manufacturingDate: String
+  expiryDate: String
+  location: Location @connection(name: "LocationExtinguisher")
+  detail: [Detail] @connection(name: "ExtinguisherDetail")
+}
+type Detail @model {
+  extinguisherId: ID!
+  detailId: ID!
+  status: String
+  createdBy: String
+  extinguisher: Extinguisher @connection(name: "ExtinguisherDetail")
+}
