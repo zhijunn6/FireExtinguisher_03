@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".EditExtinguisherActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/edit_extinguisher_extinguisherNumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Extinguisher Number"
+            />
+
+        <EditText
+            android:id="@+id/edit_extinguisher_subLocation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Extinguisher location"
+            />
+
+        <EditText
+            android:id="@+id/edit_extinguisher_manufacturingDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Extinguisher Manufacturing Date"
+            />
+
+        <EditText
+            android:id="@+id/edit_extinguisher_expiryDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Extinguisher Expiry Date"
+            />
+
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Edit extinguisher"
+            android:onClick="editExtinguisher"/>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Delete extinguisher"
+            android:onClick="deleteExtinguisher"/>
+
+    </LinearLayout>
+
+</ScrollView>

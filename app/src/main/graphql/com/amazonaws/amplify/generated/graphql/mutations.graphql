@@ -1,0 +1,227 @@
+# this is an auto generated file. This will be overwritten
+mutation CreateLocation($input: CreateLocationInput!) {
+  createLocation(input: $input) {
+    id
+    name
+    address
+    extinguisher {
+      items {
+        locationId
+        extinguisherId
+        extinguisherNumber
+        subLocation
+        manufacturingDate
+        expiryDate
+      }
+      nextToken
+    }
+  }
+}
+mutation UpdateLocation($input: UpdateLocationInput!) {
+  updateLocation(input: $input) {
+    id
+    name
+    address
+    extinguisher {
+      items {
+        locationId
+        extinguisherId
+        extinguisherNumber
+        subLocation
+        manufacturingDate
+        expiryDate
+      }
+      nextToken
+    }
+  }
+}
+mutation DeleteLocation($input: DeleteLocationInput!) {
+  deleteLocation(input: $input) {
+    id
+    name
+    address
+    extinguisher {
+      items {
+        locationId
+        extinguisherId
+        extinguisherNumber
+        subLocation
+        manufacturingDate
+        expiryDate
+      }
+      nextToken
+    }
+  }
+}
+mutation CreateExtinguisher($input: CreateExtinguisherInput!) {
+  createExtinguisher(input: $input) {
+    locationId
+    extinguisherId
+    extinguisherNumber
+    subLocation
+    manufacturingDate
+    expiryDate
+    location {
+      id
+      name
+      address
+      extinguisher {
+        nextToken
+      }
+    }
+    detail {
+      items {
+        extinguisherId
+        detailId
+        status
+        createdBy
+      }
+      nextToken
+    }
+  }
+}
+mutation UpdateExtinguisher($locationId: ID!,
+		$extinguisherId: ID!,
+		$extinguisherNumber: String!,
+		$subLocation: String!,
+		$manufacturingDate: String!,
+		$expiryDate: String!) {
+  updateExtinguisher(locationId: $locationId,
+		extinguisherId: $extinguisherId,
+		extinguisherNumber: $extinguisherNumber,
+		subLocation: $subLocation,
+		manufacturingDate: $manufacturingDate,
+		expiryDate: $expiryDate) {
+    locationId
+    extinguisherId
+    extinguisherNumber
+    subLocation
+    manufacturingDate
+    expiryDate
+    location {
+      id
+      name
+      address
+      extinguisher {
+        nextToken
+      }
+    }
+    detail {
+      items {
+        extinguisherId
+        detailId
+        status
+        createdBy
+      }
+      nextToken
+    }
+  }
+}
+mutation DeleteExtinguisher($locationId: ID!, $extinguisherId: ID!) {
+  deleteExtinguisher(locationId: $locationId, extinguisherId: $extinguisherId) {
+    locationId
+    extinguisherId
+    extinguisherNumber
+    subLocation
+    manufacturingDate
+    expiryDate
+    location {
+      id
+      name
+      address
+      extinguisher {
+        nextToken
+      }
+    }
+    detail {
+      items {
+        extinguisherId
+        detailId
+        status
+        createdBy
+      }
+      nextToken
+    }
+  }
+}
+mutation CreateDetail($input: CreateDetailInput!) {
+  createDetail(input: $input) {
+    extinguisherId
+    detailId
+    status
+    createdBy
+    extinguisher {
+      locationId
+      extinguisherId
+      extinguisherNumber
+      subLocation
+      manufacturingDate
+      expiryDate
+      location {
+        id
+        name
+        address
+      }
+      detail {
+        nextToken
+      }
+    }
+  }
+}
+mutation UpdateDetail($input: UpdateDetailInput!) {
+  updateDetail(input: $input) {
+    extinguisherId
+    detailId
+    status
+    createdBy
+    extinguisher {
+      locationId
+      extinguisherId
+      extinguisherNumber
+      subLocation
+      manufacturingDate
+      expiryDate
+      location {
+        id
+        name
+        address
+      }
+      detail {
+        nextToken
+      }
+    }
+  }
+}
+mutation DeleteDetail($input: DeleteDetailInput!) {
+  deleteDetail(input: $input) {
+    extinguisherId
+    detailId
+    status
+    createdBy
+    extinguisher {
+      locationId
+      extinguisherId
+      extinguisherNumber
+      subLocation
+      manufacturingDate
+      expiryDate
+      location {
+        id
+        name
+        address
+      }
+      detail {
+        nextToken
+      }
+    }
+  }
+}
+mutation ExtinguisherOnLocation($locationId: ID!, $extinguisherNumber: String!, $subLocation: String, $manufacturingDate: String, $expiryDate: String){
+  extinguisherOnLocation(locationId: $locationId, extinguisherNumber: $extinguisherNumber, subLocation: $subLocation, manufacturingDate: $manufacturingDate, expiryDate: $expiryDate){
+    	locationId
+      extinguisherNumber
+      subLocation
+      manufacturingDate
+      expiryDate
+  }
+}

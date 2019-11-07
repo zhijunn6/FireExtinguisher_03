@@ -1,0 +1,134 @@
+# this is an auto generated file. This will be overwritten
+query GetLocation($id: ID!) {
+  getLocation(id: $id) {
+    ...Location
+  }
+}
+query ListLocations(
+  $filter: ModelLocationFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listLocations(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      ...Location
+    }
+    nextToken
+  }
+}
+query GetExtinguisher($locationId: ID!, $extinguisherId: ID!) {
+  getExtinguisher(locationId: $locationId, extinguisherId: $extinguisherId) {
+    locationId
+    extinguisherId
+    extinguisherNumber
+    subLocation
+    manufacturingDate
+    expiryDate
+    location {
+      id
+      name
+      address
+      extinguisher {
+        nextToken
+      }
+    }
+    detail {
+      items {
+        extinguisherId
+        detailId
+        status
+        createdBy
+      }
+      nextToken
+    }
+  }
+}
+query ListExtinguishers(
+  $filter: ModelExtinguisherFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listExtinguishers(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      ...Extinguisher
+    }
+    nextToken
+  }
+}
+query GetDetail($id: ID!) {
+  getDetail(id: $id) {
+    extinguisherId
+    detailId
+    status
+    createdBy
+    extinguisher {
+      locationId
+      extinguisherId
+      extinguisherNumber
+      subLocation
+      manufacturingDate
+      expiryDate
+      location {
+        id
+        name
+        address
+      }
+      detail {
+        nextToken
+      }
+    }
+  }
+}
+query ListDetails(
+  $filter: ModelDetailFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listDetails(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      extinguisherId
+      detailId
+      status
+      createdBy
+      extinguisher {
+        locationId
+        extinguisherId
+        extinguisherNumber
+        subLocation
+        manufacturingDate
+        expiryDate
+      }
+    }
+    nextToken
+  }
+}
+query getExtinguisherbyLocation($locationId: ID!){
+  getLocationExtinguisher(locationId: $locationId){
+    items{
+      ...Extinguisher
+    }
+  }
+}
+fragment Location on Location {
+    id
+    name
+    address
+    extinguisher {
+      items {
+        locationId
+        extinguisherId
+        extinguisherNumber
+        subLocation
+        manufacturingDate
+        expiryDate
+      }
+  }
+}
+fragment Extinguisher on Extinguisher {
+      locationId
+      extinguisherId
+      extinguisherNumber
+      subLocation
+      manufacturingDate
+      expiryDate
+}

@@ -1,0 +1,218 @@
+# this is an auto generated file. This will be overwritten
+subscription OnCreateLocation {
+  onCreateLocation {
+    id
+    name
+    address
+    extinguisher {
+      items {
+        locationId
+        extinguisherId
+        extinguisherNumber
+        subLocation
+        manufacturingDate
+        expiryDate
+      }
+      nextToken
+    }
+  }
+}
+subscription OnUpdateLocation {
+  onUpdateLocation {
+    id
+    name
+    address
+    extinguisher {
+      items {
+        locationId
+        extinguisherId
+        extinguisherNumber
+        subLocation
+        manufacturingDate
+        expiryDate
+      }
+      nextToken
+    }
+  }
+}
+subscription OnDeleteLocation {
+  onDeleteLocation {
+    id
+    name
+    address
+    extinguisher {
+      items {
+        locationId
+        extinguisherId
+        extinguisherNumber
+        subLocation
+        manufacturingDate
+        expiryDate
+      }
+      nextToken
+    }
+  }
+}
+subscription OnCreateExtinguisher {
+  onCreateExtinguisher {
+    locationId
+    extinguisherId
+    extinguisherNumber
+    subLocation
+    manufacturingDate
+    expiryDate
+    location {
+      id
+      name
+      address
+      extinguisher {
+        nextToken
+      }
+    }
+    detail {
+      items {
+        extinguisherId
+        detailId
+        status
+        createdBy
+      }
+      nextToken
+    }
+  }
+}
+subscription OnUpdateExtinguisher {
+  onUpdateExtinguisher {
+    locationId
+    extinguisherId
+    extinguisherNumber
+    subLocation
+    manufacturingDate
+    expiryDate
+    location {
+      id
+      name
+      address
+      extinguisher {
+        nextToken
+      }
+    }
+    detail {
+      items {
+        extinguisherId
+        detailId
+        status
+        createdBy
+      }
+      nextToken
+    }
+  }
+}
+subscription OnDeleteExtinguisher {
+  onDeleteExtinguisher {
+    locationId
+    extinguisherId
+    extinguisherNumber
+    subLocation
+    manufacturingDate
+    expiryDate
+    location {
+      id
+      name
+      address
+      extinguisher {
+        nextToken
+      }
+    }
+    detail {
+      items {
+        extinguisherId
+        detailId
+        status
+        createdBy
+      }
+      nextToken
+    }
+  }
+}
+subscription OnCreateDetail {
+  onCreateDetail {
+    extinguisherId
+    detailId
+    status
+    createdBy
+    extinguisher {
+      locationId
+      extinguisherId
+      extinguisherNumber
+      subLocation
+      manufacturingDate
+      expiryDate
+      location {
+        id
+        name
+        address
+      }
+      detail {
+        nextToken
+      }
+    }
+  }
+}
+subscription OnUpdateDetail {
+  onUpdateDetail {
+    extinguisherId
+    detailId
+    status
+    createdBy
+    extinguisher {
+      locationId
+      extinguisherId
+      extinguisherNumber
+      subLocation
+      manufacturingDate
+      expiryDate
+      location {
+        id
+        name
+        address
+      }
+      detail {
+        nextToken
+      }
+    }
+  }
+}
+subscription OnDeleteDetail {
+  onDeleteDetail {
+    extinguisherId
+    detailId
+    status
+    createdBy
+    extinguisher {
+      locationId
+      extinguisherId
+      extinguisherNumber
+      subLocation
+      manufacturingDate
+      expiryDate
+      location {
+        id
+        name
+        address
+      }
+      detail {
+        nextToken
+      }
+    }
+  }
+}
+subscription NewExtinguisherOnLocation($locationId: String!) {
+  subscribeToLocationExtinguishers(locationId: $locationId) {
+    locationId
+    extinguisherId
+    extinguisherNumber
+    subLocation
+    manufacturingDate
+    expiryDate
+  }
+}
