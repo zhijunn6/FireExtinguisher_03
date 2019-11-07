@@ -32,6 +32,7 @@ public class EditExtinguisherActivity extends AppCompatActivity {
         extinguisher = e;
         Intent intent = new Intent(context, EditExtinguisherActivity.class);
         context.startActivity(intent);
+        //change is here owo
     }
 
     @Override
