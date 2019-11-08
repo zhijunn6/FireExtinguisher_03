@@ -1,5 +1,6 @@
 package com.example.fireextinguisher_03;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -33,6 +34,11 @@ public class MainActivity extends AppCompatActivity {
     private MyAdapter mAdapter;
     private List<ListLocationsQuery.Item> locations = new ArrayList<>();
     private AWSAppSyncClient mAWSAppSyncClient;
+
+    public static void startActivity(Context appContext) {
+        Intent intent = new Intent(appContext, MainActivity.class);
+        appContext.startActivity(intent);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,6 +104,16 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "onResume: Called");
         query();
     }
+
+    @Override
+    public void onBackPressed() {
+        exit();
+    }
+
+    private void exit () {
+        finish();
+    }
+
     public void query(){
         Log.d(TAG, "query: Called");
         if(mAWSAppSyncClient == null) {
