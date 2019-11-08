@@ -34,4 +34,17 @@ public class ClientFactory {
 
         return client;
     }
+//    private static volatile AWSAppSyncClient client;
+//
+//        public synchronized static AWSAppSyncClient getInstance(Context context) {
+//            if (client == null) {
+//                AWSConfiguration awsConfig = new AWSConfiguration(context);
+//
+//                client = AWSAppSyncClient.builder()
+//                        .context(context)
+//                        .awsConfiguration(awsConfig)
+//                        .build();
+//            }
+//            return client;
+//        }
 }

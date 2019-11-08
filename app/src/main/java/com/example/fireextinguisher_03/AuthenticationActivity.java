@@ -30,11 +30,13 @@ public class AuthenticationActivity extends AppCompatActivity {
                 @Override
                 public void onResult(UserStateDetails userStateDetails) {
                     showSignInForUser(userStateDetails);
+                    Log.i("INIT", "onResult: " + userStateDetails.getUserState());
                 }
 
                 @Override
                 public void onError(Exception e) {
                     Log.e(TAG, e.toString());
+                    Log.e("INIT", "Initialization error.", e);
                 }
             });
         }
@@ -60,7 +62,10 @@ public class AuthenticationActivity extends AppCompatActivity {
     private void showSignIn() {
         try {
             AWSMobileClient.getInstance().showSignIn(this,
-                    SignInUIOptions.builder().nextActivity(MainActivity.class).build(),
+                    SignInUIOptions.builder().nextActivity(MainActivity.class)
+                            .logo(R.drawable.logo)
+                            .canCancel(false)
+                            .build(),
                     new Callback<UserStateDetails>() {
                         @Override
                         public void onResult(UserStateDetails result) {
