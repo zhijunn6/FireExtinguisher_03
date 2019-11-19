@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.amazonaws.amplify.generated.graphql.GetExtinguisherbyLocationQuery;
 import com.amazonaws.amplify.generated.graphql.ListLocationsQuery;
 
 import java.util.List;
@@ -19,7 +18,7 @@ public class MyAdapter extends BaseAdapter {
     private List<ListLocationsQuery.Item> locations;
 
 
-    // data is passed into the constructor
+    // Data is passed into the constructor
     public MyAdapter(Context context, List<ListLocationsQuery.Item> locations) {
         this.mContext = context;
         this.locations = locations;

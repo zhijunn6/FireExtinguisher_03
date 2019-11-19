@@ -1,10 +1,12 @@
 package com.example.fireextinguisher_03;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -15,8 +17,11 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.amazonaws.amplify.generated.graphql.ListLocationsQuery;
+import com.amazonaws.amplify.generated.graphql.NewExtinguisherOnLocationSubscription;
+import com.amazonaws.amplify.generated.graphql.OnCreateLocationSubscription;
 import com.amazonaws.mobile.client.AWSMobileClient;
 import com.amazonaws.mobileconnectors.appsync.AWSAppSyncClient;
+import com.amazonaws.mobileconnectors.appsync.AppSyncSubscriptionCall;
 import com.amazonaws.mobileconnectors.appsync.fetcher.AppSyncResponseFetchers;
 import com.apollographql.apollo.GraphQLCall;
 import com.apollographql.apollo.api.Response;
@@ -34,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
     private MyAdapter mAdapter;
     private List<ListLocationsQuery.Item> locations = new ArrayList<>();
     private AWSAppSyncClient mAWSAppSyncClient;
+    private AppSyncSubscriptionCall subscriptionWatcher;
 
     public static void startActivity(Context appContext) {
         Intent intent = new Intent(appContext, MainActivity.class);
@@ -46,52 +52,41 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-//        FloatingActionButton btnAddLocation = findViewById(R.id.btn_addPet);
-//        btnAddLocation.setOnClickListener(new View.OnClickListener() {
-//
-//            @Override
-//            public void onClick(View view) {
-//                Intent addLocationIntent = new Intent(MainActivity.this, AddLocationActivity.class);
-//                MainActivity.this.startActivity(addLocationIntent);
-//            }
-//        });
-        FloatingActionButton btnSignout = findViewById(R.id.btn_signOut);
-        btnSignout.setOnClickListener(new View.OnClickListener() {
 
+        FloatingActionButton fabRefresh = (FloatingActionButton) findViewById(R.id.refresh_locations);
+        fabRefresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AWSMobileClient.getInstance().signOut();
-                Intent authIntent = new Intent(MainActivity.this, AuthenticationActivity.class);
-                finish();
-                startActivity(authIntent);
+                query();
             }
         });
 
         mAdapter = new MyAdapter(this, locations);
         listView = (ListView) findViewById(R.id.list_view);
         listView.setAdapter(mAdapter);
+
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_addLocation) {
             Toast.makeText(MainActivity.this, "Action clicked", Toast.LENGTH_LONG).show();
             Intent addLocationIntent = new Intent(MainActivity.this, AddLocationActivity.class);
             MainActivity.this.startActivity(addLocationIntent);
             return true;
+        } else if (id == R.id.options) {
+            AWSMobileClient.getInstance().signOut();
+            Intent authIntent = new Intent(MainActivity.this, AuthenticationActivity.class);
+            finish();
+            startActivity(authIntent);
         }
 
         return super.onOptionsItemSelected(item);
@@ -107,15 +102,25 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        exit();
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.app_name)
+                .setMessage(R.string.exit_string)
+                .setPositiveButton(R.string.yes_string, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        finishAffinity();
+                    }
+                })
+                .setNegativeButton(R.string.no_string, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .show();
     }
 
-    private void exit () {
-        finish();
-    }
 
     public void query(){
-        Log.d(TAG, "query: Called");
         if(mAWSAppSyncClient == null) {
             mAWSAppSyncClient = ClientFactory.getInstance(this);
         }
@@ -133,7 +138,6 @@ public class MainActivity extends AppCompatActivity {
                 locations = new ArrayList<>();
             }
 
-            Log.d(TAG, "Locations are here: " + locations);
             mAdapter.setItems(locations);
             runOnUiThread(new Runnable() {
                 @Override
@@ -146,7 +150,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onFailure(@Nonnull ApolloException e) {
-            Log.e(TAG, "Failed to make events api call", e);
+            Log.e(TAG, "Failed to make FireEX api call", e);
             Log.e(TAG, e.getMessage());
         }
     };

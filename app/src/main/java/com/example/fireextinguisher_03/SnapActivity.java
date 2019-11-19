@@ -19,6 +19,7 @@ import com.google.firebase.ml.vision.FirebaseVision;
 import com.google.firebase.ml.vision.common.FirebaseVisionImage;
 import com.google.firebase.ml.vision.text.FirebaseVisionText;
 import com.google.firebase.ml.vision.text.FirebaseVisionTextRecognizer;
+import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.util.List;
 
@@ -28,20 +29,24 @@ public class SnapActivity extends AppCompatActivity {
     public final static String EXTRA_MESSAGE = "com.example.fireextinguisher_03.MESSAGE";
     private static Location location;
     ImageView mImageView;
+    CropImageView cropImageView;
     ImageButton cameraBtn;
     ImageButton detectBtn;
+    ImageButton cropBtn;
     TextView textView;
-    Bitmap imageBitmap;
+    Bitmap imageBitmap, cropped;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_snap);
 
-        mImageView = findViewById(R.id.mImageView);
+        cropImageView = findViewById(R.id.cropImageView);
+        //mImageView = findViewById(R.id.mImageView);
         cameraBtn = findViewById(R.id.cameraButton);
         detectBtn = findViewById(R.id.detectButton);
         textView = findViewById(R.id.textView);
+        cropBtn = findViewById(R.id.cropButton);
 
         cameraBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -53,6 +58,12 @@ public class SnapActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 detectImg();
+            }
+        });
+        cropBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cropImageView.setImageBitmap(cropped);
             }
         });
     }
@@ -70,12 +81,22 @@ public class SnapActivity extends AppCompatActivity {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
             imageBitmap = (Bitmap) extras.get("data");
-            mImageView.setImageBitmap(imageBitmap);
+            cropImageView.setImageBitmap(imageBitmap);
+
+            cropImageView.setOnCropImageCompleteListener(new CropImageView.OnCropImageCompleteListener() {
+                @Override
+                public void onCropImageComplete(CropImageView view, CropImageView.CropResult result) {
+                }
+            });
+
+            cropped = cropImageView.getCroppedImage();
         }
     }
 
+
+
     private void detectImg() {
-        FirebaseVisionImage image = FirebaseVisionImage.fromBitmap(imageBitmap);
+        FirebaseVisionImage image = FirebaseVisionImage.fromBitmap(cropped);
         FirebaseVisionTextRecognizer textRecognizer =
                 FirebaseVision.getInstance().getOnDeviceTextRecognizer();
         textRecognizer.processImage(image).addOnSuccessListener(new OnSuccessListener<FirebaseVisionText>() {
@@ -95,7 +116,7 @@ public class SnapActivity extends AppCompatActivity {
         List<FirebaseVisionText.TextBlock> blocks = text.getTextBlocks();
         if (blocks.size() == 0) {
             Toast.makeText(SnapActivity.this, "Sorry, no text found", Toast.LENGTH_LONG).show();
-            String txt = "Extinguisher Number";
+            String txt = "Please key in the extinguisher number :(";
             Intent intent = new Intent(this, ViewLocationActivity.class);
             intent.putExtra(EXTRA_MESSAGE, txt);
             startActivity(intent);

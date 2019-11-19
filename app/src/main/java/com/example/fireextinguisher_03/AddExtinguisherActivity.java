@@ -1,23 +1,23 @@
 package com.example.fireextinguisher_03;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.amazonaws.amplify.generated.graphql.DeleteExtinguisherMutation;
 import com.amazonaws.amplify.generated.graphql.GetExtinguisherbyLocationQuery;
+import com.amazonaws.amplify.generated.graphql.NewExtinguisherOnLocationSubscription;
 import com.amazonaws.mobileconnectors.appsync.AWSAppSyncClient;
+import com.amazonaws.mobileconnectors.appsync.AppSyncSubscriptionCall;
 import com.amazonaws.mobileconnectors.appsync.fetcher.AppSyncResponseFetchers;
 import com.apollographql.apollo.GraphQLCall;
 import com.apollographql.apollo.api.Response;
@@ -35,10 +35,10 @@ public class AddExtinguisherActivity extends AppCompatActivity {
 
     private static Location location;
     private ExtinguisherAdapter extinguisherAdapter;
-    private ListView extinguisherListView;
     private List<GetExtinguisherbyLocationQuery.Item> extinguishers = new ArrayList<>();
     private AWSAppSyncClient mAWSAppSyncClient;
     private AlertDialog.Builder askUser;
+    private AppSyncSubscriptionCall<NewExtinguisherOnLocationSubscription.Data> subscriptionWatcher;
 
     public static void startActivity(Context context, Location l) {
         location = l;
@@ -51,70 +51,72 @@ public class AddExtinguisherActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_extinguisher);
 
+        FloatingActionButton fabRefresh = (FloatingActionButton) findViewById(R.id.refresh_extinguisher);
+        fabRefresh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                query();
+            }
+        });
+
+        FloatingActionButton fabScan = (FloatingActionButton) findViewById(R.id.scan_extinguisher);
+        fabScan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(AddExtinguisherActivity.this, ScanActivity.class);
+                startActivity(intent);
+            }
+        });
+
         extinguisherAdapter = new ExtinguisherAdapter(this, extinguishers);
-        extinguisherListView = (ListView) findViewById(R.id.list_view_extinguisher);
+        ListView extinguisherListView = (ListView) findViewById(R.id.list_view_extinguisher);
         extinguisherListView.setAdapter(extinguisherAdapter);
 
-//        extinguisherListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-//            @Override
-//            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-//
-//                final GetExtinguisherbyLocationQuery.Item post = (GetExtinguisherbyLocationQuery.Item) extinguishers.get(position);
-//
-//                askUser = new AlertDialog.Builder(AddExtinguisherActivity.this);
-//                askUser.setTitle("Update/Delete extinguisher");
-//                askUser.setMessage("Do you want to update/delete the extinguisher record?");
-//
-//                askUser.setNegativeButton("Update", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        EditExtinguisherActivity.startActivity(getBaseContext(), post.fragments().extinguisher());
-//                        dialog.cancel();
-//                    }
-//                });
-//
-//                askUser.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        DeleteExtinguisherMutation deleteExtinguisherMutation = DeleteExtinguisherMutation.builder()
-//                                .locationId(location.id())
-//                                .extinguisherId(post.fragments().extinguisher().extinguisherId())
-//                                .build();
-//
-//                        ClientFactory.getInstance(getApplicationContext())
-//                                .mutate(deleteExtinguisherMutation)
-//                                .enqueue(deleteExtinguisherCallback);
-//
-//                        dialog.cancel();
-//                    }
-//                });
-//
-//                AlertDialog alert = askUser.create();
-//                alert.show();
-//
-//                return true;
-//            }
-//        });
+        startSubscription();
     }
+
+    private void startSubscription() {
+        NewExtinguisherOnLocationSubscription subscription = NewExtinguisherOnLocationSubscription.builder().locationId(location.id()).build();
+        subscriptionWatcher = ClientFactory.getInstance(this.getApplicationContext()).subscribe(subscription);
+        subscriptionWatcher.execute(subscriptionCallback);
+    }
+
+    private AppSyncSubscriptionCall.Callback<NewExtinguisherOnLocationSubscription.Data> subscriptionCallback = new AppSyncSubscriptionCall.Callback<NewExtinguisherOnLocationSubscription.Data>() {
+        @Override
+        public void onResponse(final @Nonnull Response<NewExtinguisherOnLocationSubscription.Data> response) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    //Toast.makeText(ViewEventActivity.this, response.data().subscribeToEventComments().eventId().substring(0, 5) + response.data().subscribeToEventComments().content(), Toast.LENGTH_LONG).show();
+                    Log.e(TAG, "Subscription response: " + response.data().toString());
+                    NewExtinguisherOnLocationSubscription.SubscribeToLocationExtinguishers exty = response.data().subscribeToLocationExtinguishers();
+                }
+            });
+        }
+
+        @Override
+        public void onFailure(final @Nonnull ApolloException e) {
+            Log.e(TAG, "Subscription failure", e);
+        }
+
+        @Override
+        public void onCompleted() {
+            Log.d(TAG, "Subscription completed");
+        }
+    };
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_extinguisher, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_addExtinguisher) {
-            Toast.makeText(AddExtinguisherActivity.this, "Action clicked", Toast.LENGTH_LONG).show();
-            ViewLocationActivity.startActivity(getBaseContext(), location);
+            ViewLocationActivity.startActivity(AddExtinguisherActivity.this, location);
             return true;
         }
 
@@ -124,6 +126,7 @@ public class AddExtinguisherActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
+
         // Query list data when we return to the screen
         query();
     }

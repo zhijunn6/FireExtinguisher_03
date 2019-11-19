@@ -1,20 +1,7 @@
 # this is an auto generated file. This will be overwritten
 subscription OnCreateLocation {
   onCreateLocation {
-    id
-    name
-    address
-    extinguisher {
-      items {
-        locationId
-        extinguisherId
-        extinguisherNumber
-        subLocation
-        manufacturingDate
-        expiryDate
-      }
-      nextToken
-    }
+    ...Location
   }
 }
 subscription OnUpdateLocation {

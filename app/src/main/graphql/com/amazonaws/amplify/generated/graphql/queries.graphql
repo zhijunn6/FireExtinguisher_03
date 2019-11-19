@@ -109,6 +109,13 @@ query getExtinguisherbyLocation($locationId: ID!){
     }
   }
 }
+query getExtinguisherByNumber($extinguisherNumber: String){
+  getExtinguisherByNumber(extinguisherNumber: $extinguisherNumber){
+    items{
+      ...Extinguisher
+    }
+  }
+}
 fragment Location on Location {
     id
     name

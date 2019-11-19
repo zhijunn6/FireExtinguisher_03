@@ -2,10 +2,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.example.fireextinguisher_03.MainActivity">
+
     <item
         android:id="@+id/action_addLocation"
         android:orderInCategory="300"
         android:title="AddLocation"
         android:icon="@drawable/ic_add_black_24dp"
         app:showAsAction="ifRoom"></item>
+
+    <item
+        android:id="@+id/options"
+        android:title="Sign Out"
+        app:showAsAction="never"/>
+
 </menu>

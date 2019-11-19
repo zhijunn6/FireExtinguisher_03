@@ -16,7 +16,7 @@ public class ExtinguisherAdapter extends BaseAdapter {
     private LayoutInflater mInflater;
     private List<GetExtinguisherbyLocationQuery.Item> extinguishers;
 
-    // data is passed into the constructor
+    // ata is passed into the constructor
     public ExtinguisherAdapter(Context context, List<GetExtinguisherbyLocationQuery.Item> extinguishers) {
         this.mContext = context;
         this.extinguishers = extinguishers;
@@ -40,8 +40,10 @@ public class ExtinguisherAdapter extends BaseAdapter {
         if(convertView == null) {
             convertView = mInflater.inflate(R.layout.extinguisher_list_view, parent, false);
             holder = new ViewHolder();
-            holder.extinguisherNumberTextView = (TextView) convertView.findViewById(R.id.extinguisher_serialCode);
-            holder.extinguisherExpiryDateTextView = (TextView) convertView.findViewById(R.id.extinguisher_description);
+            holder.extinguisherNumberTextView = (TextView) convertView.findViewById(R.id.extinguisher_number);
+            holder.extinguisherSublocationTextView = (TextView) convertView.findViewById(R.id.extinguisher_subLocation);
+            holder.extinguisherExpiryDateTextView = (TextView) convertView.findViewById(R.id.extinguisher_expiryDate);
+
 
             convertView.setTag(holder);
         } else {
@@ -51,6 +53,7 @@ public class ExtinguisherAdapter extends BaseAdapter {
         final GetExtinguisherbyLocationQuery.Item post = (GetExtinguisherbyLocationQuery.Item) getItem(i);
 
         holder.extinguisherNumberTextView.setText(post.fragments().extinguisher().extinguisherNumber());
+        holder.extinguisherSublocationTextView.setText(post.fragments().extinguisher().subLocation());
         holder.extinguisherExpiryDateTextView.setText(post.fragments().extinguisher().expiryDate());
 
         convertView.setOnClickListener(new View.OnClickListener() {
@@ -66,5 +69,6 @@ public class ExtinguisherAdapter extends BaseAdapter {
     private static class ViewHolder {
         public TextView extinguisherNumberTextView;
         public TextView extinguisherExpiryDateTextView;
+        public TextView extinguisherSublocationTextView;
     }
 }

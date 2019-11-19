@@ -13,6 +13,4 @@
         android:padding="10dp"
         android:longClickable="true"/>
 
-
-
 </RelativeLayout>
