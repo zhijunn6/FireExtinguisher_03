@@ -69,7 +69,6 @@ public class AuthenticationActivity extends AppCompatActivity {
                     new Callback<UserStateDetails>() {
                         @Override
                         public void onResult(UserStateDetails result) {
-                            Log.d(TAG, "Showing Signin UI: ");
                         }
 
                         @Override

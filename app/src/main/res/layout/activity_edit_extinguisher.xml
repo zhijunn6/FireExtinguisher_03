@@ -4,54 +4,160 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".EditExtinguisherActivity">
+    tools:context=".EditExtinguisherActivity"
+    android:layout_margin="20dp">
 
-    <LinearLayout
+    <ViewSwitcher
+        android:id="@+id/viewSwitcher"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="wrap_content">
 
-        <EditText
-            android:id="@+id/edit_extinguisher_extinguisherNumber"
+        <LinearLayout
+            android:id="@+id/view_extinguisherText"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Extinguisher Number"
-            />
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/edit_extinguisher_subLocation"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Extinguisher Number"
+                android:textSize="15sp"
+                />
+            <TextView
+                android:id="@+id/text_extinguisher_extinguisherNumber"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Extinguisher Number"
+                android:textSize="25dp"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Extinguisher Location"
+                android:textSize="15sp"
+                />
+            <TextView
+                android:id="@+id/text_extinguisher_subLocation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Extinguisher Location"
+                android:textSize="25dp"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Extinguisher Manufacturing Date"
+                android:textSize="15sp"
+                />
+            <TextView
+                android:id="@+id/text_extinguisher_manufacturingDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Extinguisher Manufacturing Date"
+                android:textSize="25dp"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Extinguisher Expiry Date"
+                android:textSize="15sp"
+                />
+            <TextView
+                android:id="@+id/text_extinguisher_expiryDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Extinguisher Expiry Date"
+                android:textSize="25dp"
+                />
+
+
+            <Button
+                android:id="@+id/toEditSwitch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="editExtinguisher"
+                android:textColor="@color/cardview_light_background"
+                android:layout_marginTop="20dp"
+                android:text="Edit Extinguisher"
+                android:background="@drawable/button_1"/>
+
+            <Button
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Delete extinguisher"
+                android:onClick="deleteExtinguisher"
+                android:textColor="@color/colorPrimary"
+                android:background="@drawable/button_2"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/view_editExtinguisher"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Extinguisher location"
-            />
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/edit_extinguisher_manufacturingDate"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Extinguisher Manufacturing Date"
-            />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Extinguisher Number"
+                android:textSize="15sp"
+                />
+            <EditText
+                android:id="@+id/edit_extinguisher_extinguisherNumber"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                />
 
-        <EditText
-            android:id="@+id/edit_extinguisher_expiryDate"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Extinguisher Expiry Date"
-            />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Extinguisher Location"
+                android:textSize="15sp"
+                />
+            <EditText
+                android:id="@+id/edit_extinguisher_subLocation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Extinguisher Manufacturing Date"
+                android:textSize="15sp"
+                />
+            <EditText
+                android:id="@+id/edit_extinguisher_manufacturingDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Extinguisher Expiry Date"
+                android:textSize="15sp"
+                />
+            <EditText
+                android:id="@+id/edit_extinguisher_expiryDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                />
 
 
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Edit extinguisher"
-            android:onClick="editExtinguisher"/>
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Confirm Edit"
+                android:onClick="editExtinguisher"
+                android:textColor="@color/cardview_light_background"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/button_1"/>
 
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Delete extinguisher"
-            android:onClick="deleteExtinguisher"/>
+        </LinearLayout>
 
-    </LinearLayout>
+    </ViewSwitcher>
 
 </ScrollView>

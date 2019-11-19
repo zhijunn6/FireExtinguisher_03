@@ -1,24 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android" android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center_vertical|left"
+    android:gravity="center_vertical"
     android:longClickable="true">
 
     <TextView
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Extinguisher Serial Code"
-        android:id="@+id/extinguisher_serialCode"
+        android:text="Extinguisher Number"
+        android:id="@+id/extinguisher_number"
         android:padding="5dp"
         android:textSize="20sp"
         android:textColor="@android:color/black"/>
+
     <TextView
-        android:id="@+id/extinguisher_description"
+        android:id="@+id/extinguisher_description1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:text="Extinguisher expires on"
+        android:layout_below="@id/extinguisher_number"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/extinguisher_expiryDate"
         android:text="Extinguisher Description"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:layout_below="@id/extinguisher_number"
+        android:layout_toRightOf="@id/extinguisher_description1"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/extinguisher_subLocation"
+        android:text="subLocation"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="30dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="5dp"
         android:textSize="15sp" />
 
-</LinearLayout>
+</RelativeLayout>

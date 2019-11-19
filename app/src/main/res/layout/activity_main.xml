@@ -6,26 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-<!--    <android.support.design.widget.FloatingActionButton-->
-<!--        android:id="@+id/btn_addPet"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_gravity="top|end"-->
-<!--        app:layout_anchor="@+id/btn_signOut"-->
-<!--        android:layout_margin="16dp"-->
-<!--        android:tint="@android:color/white"-->
-<!--        app:srcCompat="@android:drawable/ic_input_add"/>-->
-
     <include layout="@layout/content_main" />
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/btn_signOut"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|right|end"
-        android:layout_margin="16dp"
-        android:tint="@android:color/white"
-        app:srcCompat="@android:drawable/ic_input_delete"/>
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -41,5 +22,14 @@
             style="@style/HeaderBar"/>
 
     </android.support.design.widget.AppBarLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/refresh_locations"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right|end"
+        android:layout_margin="@dimen/fab_margin"
+        android:tint="@android:color/white"
+        app:srcCompat="@android:drawable/ic_menu_rotate" />
 
 </android.support.design.widget.CoordinatorLayout>

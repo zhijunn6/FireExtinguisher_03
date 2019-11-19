@@ -3,12 +3,10 @@ package com.example.fireextinguisher_03;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.DatePicker;
@@ -16,8 +14,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.amazonaws.amplify.generated.graphql.CreateLocationMutation;
-import com.amazonaws.amplify.generated.graphql.DeleteExtinguisherMutation;
 import com.amazonaws.amplify.generated.graphql.DeleteLocationMutation;
 import com.amazonaws.amplify.generated.graphql.ExtinguisherOnLocationMutation;
 import com.amazonaws.amplify.generated.graphql.GetLocationQuery;
@@ -30,7 +26,6 @@ import com.apollographql.apollo.api.Response;
 import com.apollographql.apollo.exception.ApolloException;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -70,10 +65,20 @@ public class ViewLocationActivity extends AppCompatActivity {
         newExtinguisher_subLocation = (EditText)findViewById(R.id.new_extinguisher_subLocation);
         newExtinguisher_manufDate = (EditText)findViewById(R.id.new_extinguisher_manufacturingDate);
         newExtinguisher_expDate = (EditText)findViewById(R.id.new_extinguisher_expiryDate);
-        extinguishers = (TextView)findViewById(R.id.extinguishers);
+        //extinguishers = (TextView)findViewById(R.id.extinguishers);
 
         name.setText(location.name());
         address.setText(location.address());
+
+        FloatingActionButton btnToSnapActivity = findViewById(R.id.btnSnap);
+        btnToSnapActivity.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ViewLocationActivity.this, SnapActivity.class);
+                startActivity(intent);
+            }
+        });
 
         Log.d(TAG, "onCreate x called");
 
@@ -89,7 +94,7 @@ public class ViewLocationActivity extends AppCompatActivity {
                         new DatePickerDialog.OnDateSetListener() {
                             @Override
                             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                                newExtinguisher_manufDate.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
+                                newExtinguisher_manufDate.setText(year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
                             }
                         }, year, month, day);
                 manufDatePick.show();
@@ -108,14 +113,14 @@ public class ViewLocationActivity extends AppCompatActivity {
                         new DatePickerDialog.OnDateSetListener() {
                             @Override
                             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                                newExtinguisher_expDate.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
+                                newExtinguisher_expDate.setText(year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
                             }
                         }, year1, month1, day1);
                 expDatePick.show();
             }
         });
 
-        refreshExtinguishers(true);
+//        refreshExtinguishers(true);
         startSubscription();
     }
 
@@ -140,17 +145,10 @@ public class ViewLocationActivity extends AppCompatActivity {
             }
     }
 
-    public void toSnapImageActivity(View view) {
-        Intent intent = new Intent(this, SnapActivity.class);
-        startActivity(intent);
-    }
-
     private void startSubscription() {
         NewExtinguisherOnLocationSubscription subscription = NewExtinguisherOnLocationSubscription.builder().locationId(location.id()).build();
-
         subscriptionWatcher = ClientFactory.getInstance(this.getApplicationContext()).subscribe(subscription);
         subscriptionWatcher.execute(subscriptionCallback);
-
     }
 
     private AppSyncSubscriptionCall.Callback<NewExtinguisherOnLocationSubscription.Data> subscriptionCallback = new AppSyncSubscriptionCall.Callback<NewExtinguisherOnLocationSubscription.Data>() {
@@ -164,6 +162,8 @@ public class ViewLocationActivity extends AppCompatActivity {
                     NewExtinguisherOnLocationSubscription.SubscribeToLocationExtinguishers extinguisher = response.data().subscribeToLocationExtinguishers();
 
                     addExtinguisher(extinguisher.extinguisherNumber());
+
+                    Log.d(TAG, "Subscription returned" + extinguisher);
 
                     addExtinguisherToCache(extinguisher);
 
@@ -191,6 +191,18 @@ public class ViewLocationActivity extends AppCompatActivity {
         InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(newExtinguisher_extinguisherNo.getWindowToken(), 0);
 
+        //Validation
+
+        if(newExtinguisher_extinguisherNo.getText().toString().equals("")){
+            newExtinguisher_extinguisherNo.setError("Extinguisher Number is required!");
+            return;
+        }
+
+        if(newExtinguisher_subLocation.getText().toString().equals("")){
+            newExtinguisher_subLocation.setError("Sub Location is required!");
+            return;
+        }
+
         Toast.makeText(this, "Creating extinguisher", Toast.LENGTH_SHORT).show();
 
         ExtinguisherOnLocationMutation extinguisher = ExtinguisherOnLocationMutation.builder()
@@ -213,20 +225,11 @@ public class ViewLocationActivity extends AppCompatActivity {
                 .id(location.id())
                 .build();
 
-//        DeleteExtinguisherInput input2 = DeleteExtinguisherInput.builder()
-//                .id(location.id())
-//                .build();
-
         DeleteLocationMutation deleteLocationMutation = DeleteLocationMutation.builder()
                 .input(input)
                 .build();
 
-//        DeleteExtinguisherMutation deleteExtinguisherMutation = DeleteExtinguisherMutation.builder()
-//                .input(input2)
-//                .build();
-
         awsAppSyncClient.mutate(deleteLocationMutation).enqueue(mutateCallback);
-//        awsAppSyncClient.mutate(deleteExtinguisherMutation).enqueue(mutateCallback2);
     }
 
     // Mutation callback code
@@ -237,7 +240,6 @@ public class ViewLocationActivity extends AppCompatActivity {
                 @Override
                 public void run() {
                     Toast.makeText(ViewLocationActivity.this, "Added location", Toast.LENGTH_SHORT).show();
-                    ViewLocationActivity.this.finish();
                 }
             });
         }
@@ -249,37 +251,10 @@ public class ViewLocationActivity extends AppCompatActivity {
                 public void run() {
                     Log.e("", "Failed to perform AddLocationMutation", e);
                     Toast.makeText(ViewLocationActivity.this, "Failed to add location", Toast.LENGTH_SHORT).show();
-                    ViewLocationActivity.this.finish();
                 }
             });
         }
     };
-
-//    // Mutation callback code
-//    private GraphQLCall.Callback<DeleteExtinguisherMutation.Data> mutateCallback2 = new GraphQLCall.Callback<DeleteExtinguisherMutation.Data>() {
-//        @Override
-//        public void onResponse(@Nonnull final Response<DeleteExtinguisherMutation.Data> response) {
-//            runOnUiThread(new Runnable() {
-//                @Override
-//                public void run() {
-//                    Toast.makeText(ViewLocationActivity.this, "Added location", Toast.LENGTH_SHORT).show();
-//                    ViewLocationActivity.this.finish();
-//                }
-//            });
-//        }
-//
-//        @Override
-//        public void onFailure(@Nonnull final ApolloException e) {
-//            runOnUiThread(new Runnable() {
-//                @Override
-//                public void run() {
-//                    Log.e("", "Failed to perform AddLocationMutation", e);
-//                    Toast.makeText(ViewLocationActivity.this, "Failed to add location", Toast.LENGTH_SHORT).show();
-//                    ViewLocationActivity.this.finish();
-//                }
-//            });
-//        }
-//    };
 
     /**
      * Service response subscriptionCallback confirming receipt of new comment triggered by UI.
@@ -311,7 +286,6 @@ public class ViewLocationActivity extends AppCompatActivity {
         try {
             //Read old location data
             GetLocationQuery getLocationQuery = GetLocationQuery.builder().id(location.id()).build();
-            //GetLocationQuery.Data readData = ClientFactory.appSyncClient().getStore().read(getLocationQuery).execute();
             GetLocationQuery.Data readData = ClientFactory.getInstance(ViewLocationActivity.this).getStore().read(getLocationQuery).execute();
             Location location = readData.getLocation().fragments().location();
 
@@ -388,13 +362,12 @@ public class ViewLocationActivity extends AppCompatActivity {
     }
 
     private void refreshExtinguishers() {
-        Log.d(TAG, "refreshExtinguishers: called!");
         StringBuilder stringBuilder = new StringBuilder();
         for (Location.Item i : location.extinguisher().items()) {
             stringBuilder.append(i.extinguisherNumber() + "\n---------\n");
         }
 
-        extinguishers.setText(stringBuilder.toString());
+        //extinguishers.setText(stringBuilder.toString());
     }
 
     private void clearExtinguishers() {

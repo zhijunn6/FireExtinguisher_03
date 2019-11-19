@@ -16,17 +16,20 @@ import com.apollographql.apollo.exception.ApolloException;
 
 import javax.annotation.Nonnull;
 
-import type.CreateDetailInput;
 import type.CreateLocationInput;
 
 public class AddLocationActivity extends AppCompatActivity {
 
     private static final String TAG = AddLocationActivity.class.getSimpleName();
+    private EditText locationName, locationAddress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_location);
+
+        locationName = (EditText) findViewById(R.id.editTxt_name);
+        locationAddress = (EditText) findViewById(R.id.editText_address);
 
         Button btnAddItem = findViewById(R.id.btn_save);
         btnAddItem.setOnClickListener(new View.OnClickListener() {
@@ -39,9 +42,15 @@ public class AddLocationActivity extends AppCompatActivity {
     }
 
     private void save() {
-        final String name = ((EditText) findViewById(R.id.editTxt_name)).getText().toString();
-        final String address = ((EditText) findViewById(R.id.editText_address)).getText().toString();
+        final String name = locationName.getText().toString();
+        final String address = locationAddress.getText().toString();
         AWSAppSyncClient awsAppSyncClient = ClientFactory.getInstance(this.getApplicationContext());
+
+        if(locationName.getText().toString().equals("")){
+            locationName.setError("Location Name is required!");
+            return;
+        }
+
         CreateLocationInput input = CreateLocationInput.builder()
                 .name(name)
                 .address(address)
